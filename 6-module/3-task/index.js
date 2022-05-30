@@ -62,18 +62,23 @@ export default class Carousel {
 
 
     addEventListeners(){
-      this.elem.addEventListener('click', (event) => {
-        if (event.target.classList != "carousel__button") return
-        const dataElem = event.target.closest('.carousel__slide').dataset.id
-     
-        let productAdd = new CustomEvent("product-add", { 
-          detail: dataElem,
-          bubbles: true 
-      })
-      this.elem.dispatchEvent(productAdd)
-
-      })
+    
+      this.elem.onclick = ({target}) => {
+        let button = target.closest('.carousel__button');
+        if (button) {
+          let id = target.closest('[data-id]').dataset.id;
+          console.log(id)
+  
+          this.elem.dispatchEvent(new CustomEvent('product-add', {
+            detail: id,
+            bubbles: true
+          }));
         }
+      }
+
+        }
+
+
       }
 
     
