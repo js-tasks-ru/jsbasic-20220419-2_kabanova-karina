@@ -5,8 +5,6 @@ export default class Modal {
     this.create()
     this.addCloseButtonListener()
     this.addEscListener()
-  }
-
   create() {
     this.elem = createElement(`
     <div class="modal">
@@ -69,3 +67,4 @@ export default class Modal {
     })
   }
 } 
+}
