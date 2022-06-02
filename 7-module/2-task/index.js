@@ -5,6 +5,7 @@ export default class Modal {
     this.create()
     this.addCloseButtonListener()
     this.addEscListener()
+  }
   create() {
     this.elem = createElement(`
     <div class="modal">
@@ -33,6 +34,7 @@ export default class Modal {
   `)
 
   }
+
   setTitle(title) {
     let modalTitle = this.elem.querySelector(".modal__title")
     modalTitle.innerHTML = title
@@ -67,4 +69,4 @@ export default class Modal {
     })
   }
 } 
-}
+
