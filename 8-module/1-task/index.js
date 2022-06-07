@@ -3,7 +3,6 @@ import createElement from '../../assets/lib/create-element.js';
 export default class CartIcon {
   constructor() {
     this.render();
-
     this.addEventListeners();
   }
 
@@ -40,20 +39,23 @@ export default class CartIcon {
 
   updatePosition() {
 
-    if (this.elem.offsetWidth != 57) return
-    let getInitialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset
+    if (!this.elem.offsetWidth) return
+
+    if (!this.initialTopCoord) {
+      this.initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset;
+    }
+
+
+
     let windowpageYOffset = window.pageYOffset
-  
+
 
     let leftIndent = Math.min(
       document.querySelector('.container').getBoundingClientRect().right + 20,
       document.documentElement.clientWidth - this.elem.offsetWidth - 10
     ) + 'px'
-    console.log(leftIndent  +" leftIndent ")
 
-
-
-    if (windowpageYOffset > getInitialTopCoord) {
+    if (windowpageYOffset > this.initialTopCoord) {
       Object.assign(this.elem.style, {
         position: 'fixed',
         top: '50px',
@@ -71,7 +73,7 @@ export default class CartIcon {
       });
 
     }
-    
+
     if (document.documentElement.clientWidth <= 767) {
       Object.assign(this.elem.style, {
         position: '',
