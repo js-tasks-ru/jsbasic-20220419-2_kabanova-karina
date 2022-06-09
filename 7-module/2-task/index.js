@@ -42,8 +42,11 @@ export default class Modal {
 
   setBody(body) {
     this.modalBody = this.elem.querySelector(".modal__body")
-    this.modalBody.innerHTML = ""
-    this.modalBody.append(body)
+    if (this.modalBody) {
+      this.modalBody.innerHTML = ""
+      this.modalBody.append(body)
+    } else { alert('hothing')}
+
   }
 
   open() {
@@ -54,7 +57,7 @@ export default class Modal {
   close() {
     this.elem.remove()
     document.body.classList.remove('is-modal-open')
-    
+
   }
 
   addCloseButtonListener() {
@@ -68,5 +71,5 @@ export default class Modal {
       if (event.code === 'Escape') this.close()
     })
   }
-} 
+}
 
