@@ -3,7 +3,6 @@ import createElement from '../../assets/lib/create-element.js';
 export default class CartIcon {
   constructor() {
     this.render();
-
     this.addEventListeners();
   }
 
@@ -26,60 +25,63 @@ export default class CartIcon {
       this.elem.classList.add('shake');
       this.elem.addEventListener('transitionend', () => {
         this.elem.classList.remove('shake');
-      }, {once: true});
+      }, { once: true });
 
     } else {
       this.elem.classList.remove('cart-icon_visible');
     }
   }
 
+  addEventListeners() {
+    document.addEventListener('scroll', () => this.updatePosition());
+    window.addEventListener('resize', () => this.updatePosition());
+  }
+
   updatePosition() {
 
-    if (!this.elem.offsetHeight) {return;} // not visible
+    if (!this.elem.offsetWidth) return
 
     if (!this.initialTopCoord) {
       this.initialTopCoord = this.elem.getBoundingClientRect().top + window.pageYOffset;
     }
 
-    if (document.documentElement.clientWidth <= 767) {
-      // mobile: cart is always fixed
-      this.resetPosition();
-      return;
-    }
 
-    let isHeaderCartScrolled = window.pageYOffset > this.initialTopCoord;
 
-    if (isHeaderCartScrolled) {
-      this.fixPosition();
+    let windowpageYOffset = window.pageYOffset
+
+
+    let leftIndent = Math.min(
+      document.querySelector('.container').getBoundingClientRect().right + 20,
+      document.documentElement.clientWidth - this.elem.offsetWidth - 10
+    ) + 'px'
+
+    if (windowpageYOffset > this.initialTopCoord) {
+      Object.assign(this.elem.style, {
+        position: 'fixed',
+        top: '50px',
+        zIndex: 1e3,
+        right: '10px',
+        left: leftIndent
+      });
+
     } else {
-      this.resetPosition();
+      Object.assign(this.elem.style, {
+        position: '',
+        top: '',
+        left: '',
+        zIndex: ''
+      });
+
     }
-  }
 
-  fixPosition() {
-    Object.assign(this.elem.style, {
-      position: 'fixed',
-      top: '50px',
-      zIndex: 1e3,
-      left: Math.min(
-        // справа от содержимого (определяем по первому контейнеру в нашей вёрстке)
-        document.querySelector('.container').getBoundingClientRect().right + 20,
-        document.documentElement.clientWidth - this.elem.offsetWidth - 10
-      ) + 'px'
-    });
-  }
+    if (document.documentElement.clientWidth <= 767) {
+      Object.assign(this.elem.style, {
+        position: '',
+        top: '',
+        left: '',
+        zIndex: ''
+      });
+    }
 
-  resetPosition() {
-    Object.assign(this.elem.style, {
-      position: '',
-      top: '',
-      left: '',
-      zIndex: ''
-    });
-  }
-
-  addEventListeners() {
-    document.addEventListener('scroll', () => this.updatePosition());
-    window.addEventListener('resize', () => this.updatePosition());
   }
 }

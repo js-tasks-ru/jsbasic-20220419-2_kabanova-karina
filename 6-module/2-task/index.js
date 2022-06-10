@@ -37,9 +37,7 @@ export default class ProductCard {
           bubbles: true
         }));
       }
-     
-      
-
+   
     })
     
   }

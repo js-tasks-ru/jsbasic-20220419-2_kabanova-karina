@@ -1,9 +1,88 @@
 import createElement from '../../assets/lib/create-element.js';
-import ProductCard from '../../6-module/2-task/index.js';
 
-export default class ProductGrid {
+export default  class ProductGrid {
   constructor(products) {
-    this.products = products;
+    this.products = products
+    this.displayedProducts = this.products;
     this.filters = {};
+    this.elem = createElement(`
+<div class="products-grid">
+<div class="products-grid__inner">
+  <!--ВОТ ТУТ БУДУТ КАРТОЧКИ ТОВАРОВ-->
+</div>
+</div>`)
+    this.create(this.displayedProducts)
+
+  }
+
+  create(products) {
+    let cards = document.querySelectorAll(".card")
+    if (cards.length > 0) {
+      cards.forEach(item => item.remove())
+    }
+    this.productsGridInner = this.elem.querySelector('.products-grid__inner')
+    for (let obj of products) { // объекты
+      this.fillsSample(obj, this.productsGridInner)
+    }
+
+  }
+  fillsSample(smt, object) {
+    object.innerHTML += `
+<div class="card">
+<div class="card__top">
+  <img
+    src="/assets/images/products/${smt.image}"
+    class="card__image"
+    alt="product"
+  />
+  <span class="card__price">€${smt.price.toFixed(2)}</span>
+</div>
+<div class="card__body">
+  <div class="card__title">${(smt.name)}</div>
+  <button type="button" class="card__button">
+    <img src="/assets/images/icons/plus-icon.svg" alt="icon" />
+  </button>
+</div>
+</div>
+`
+  }
+  updateFilter(filtersUpdate) {
+    this.updateFiltersState(filtersUpdate)
+    let productsToDisplay = this.products
+
+
+    for (let key in this.filters) {
+      if (key === "noNuts" && this.filters[key] === true) {
+        productsToDisplay = productsToDisplay.filter(item => item.nuts == undefined)
+      }
+
+      if (key === "vegeterianOnly" && this.filters[key] === true) {
+        productsToDisplay = productsToDisplay.filter(item => "vegeterian" in item)
+      }
+      if (key === "maxSpiciness") {
+        productsToDisplay = productsToDisplay.filter(item => item.spiciness <= this.filters[key])
+      }
+
+      if (key === "category" && this.filters[key] === "salads") {
+        productsToDisplay = productsToDisplay.filter(item => item.category == "salads")
+      }
+      if (key === "category" && this.filters[key] === 'soups') {
+        productsToDisplay = productsToDisplay.filter(item => item.category == 'soups')
+      }
+      if (key === "category" && this.filters[key] === "seafood-dishes") {
+        productsToDisplay = productsToDisplay.filter(item => item.category == "seafood-dishes")
+      }
+
+    }
+    console.log(productsToDisplay)
+
+
+    this.create(productsToDisplay)
+  }
+
+  updateFiltersState(filterUpdate) {
+    for (const [key, value] of Object.entries(filterUpdate)) {
+      this.filters[key] = value
+    }
   }
 }
