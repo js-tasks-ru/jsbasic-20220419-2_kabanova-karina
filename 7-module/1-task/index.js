@@ -51,7 +51,6 @@ export default class RibbonMenu {
     this.ribbonInner.addEventListener('click', (event) => {
       if (event.target.classList.contains("ribbon__item")) {
         for (let a of this.elem.querySelectorAll('.ribbon__item')) {
-          console.log(a)
           a.classList.remove("ribbon__item_active")
         }
 
