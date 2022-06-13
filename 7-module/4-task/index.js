@@ -3,18 +3,20 @@ export default class StepSlider {
   constructor({ steps, value = 0 }) {
     this.steps = steps
     this.value = value
+    this.segments = this.steps - 1
     this.create()
     this.addEventClick()
     this.addDragandDrop()
 
   }
   create() {
+    this.valuePercents = this.value / this.segments * 100
     this.elem = createElement(`
     <div class="slider">
-    <div class="slider__thumb" style="left: ${this.value}%;">
+    <div class="slider__thumb" style="left: ${this.valuePercents}%;">
       <span class="slider__value">${this.value}</span>
     </div>
-    <div class="slider__progress" style="width: ${this.value};"></div>
+    <div class="slider__progress" style="width: ${this.valuePercents}%;"></div>
     <div class="slider__steps">
     </div>
   </div>
@@ -43,7 +45,11 @@ export default class StepSlider {
       let valuePercents = value / segments * 100
       this.changeStep(value, valuePercents)
       this.changeClass(value)
-      this
+      this.elem.dispatchEvent(new CustomEvent('slider-change', {
+        detail: value,
+        bubbles: true
+      }))
+
     })
   }
 
@@ -66,12 +72,6 @@ export default class StepSlider {
     }
 
     this.elem.querySelector('.slider__steps').children[value].classList.add('slider__step-active')
-
-    this.elem.dispatchEvent(new CustomEvent('slider-change', {
-      detail: value,
-      bubbles: true
-    })) 
-
   }
 
   addDragandDrop() {
@@ -91,19 +91,19 @@ export default class StepSlider {
 
       document.addEventListener('pointermove', rr)
       document.addEventListener('pointerup', () => {
-      
+
         document.removeEventListener('pointermove', rr)
         if (document.querySelector(".slider_dragging")) document.querySelector(".slider_dragging").classList.remove("slider_dragging")
         this.elem.dispatchEvent(new CustomEvent('slider-change', {
           detail: this.value01,
           bubbles: true
         }))
-        
+
       }) // pointerup
 
 
     }) //скобочки от pointerdown
-  
+
   }
 
   pointermove(event, elem) {
@@ -127,17 +127,6 @@ export default class StepSlider {
 
   }
 
-  
+
 
 }
-
-
-
-
-
-
-
-
-
-
-

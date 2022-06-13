@@ -1,6 +1,6 @@
 import createElement from '../../assets/lib/create-element.js';
 
-export default  class ProductGrid {
+export default class ProductGrid {
   constructor(products) {
     this.products = products
     this.displayedProducts = this.products;
@@ -24,8 +24,8 @@ export default  class ProductGrid {
     for (let obj of products) { // объекты
       this.fillsSample(obj, this.productsGridInner)
     }
+  } 
 
-  }
   fillsSample(smt, object) {
     object.innerHTML += `
 <div class="card">
@@ -47,22 +47,19 @@ export default  class ProductGrid {
 `
   }
   updateFilter(filtersUpdate) {
-    this.updateFiltersState(filtersUpdate)
+    this.updateFiltersState(filtersUpdate) // возрващает this.filters
     let productsToDisplay = this.products
-
-
     for (let key in this.filters) {
       if (key === "noNuts" && this.filters[key] === true) {
-        productsToDisplay = productsToDisplay.filter(item => item.nuts == undefined)
+        productsToDisplay = productsToDisplay.filter(item => item.nuts === undefined ||item.nuts === false )
       }
-
+  
       if (key === "vegeterianOnly" && this.filters[key] === true) {
-        productsToDisplay = productsToDisplay.filter(item => "vegeterian" in item)
+        productsToDisplay = productsToDisplay.filter(item =>  item.vegeterian === true)
       }
       if (key === "maxSpiciness") {
         productsToDisplay = productsToDisplay.filter(item => item.spiciness <= this.filters[key])
       }
-
       if (key === "category" && this.filters[key] === "salads") {
         productsToDisplay = productsToDisplay.filter(item => item.category == "salads")
       }
@@ -72,12 +69,10 @@ export default  class ProductGrid {
       if (key === "category" && this.filters[key] === "seafood-dishes") {
         productsToDisplay = productsToDisplay.filter(item => item.category == "seafood-dishes")
       }
-
     }
-    console.log(productsToDisplay)
-
-
     this.create(productsToDisplay)
+    console.log(this.filters)
+    console.log(productsToDisplay)
   }
 
   updateFiltersState(filterUpdate) {
